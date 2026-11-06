@@ -1,0 +1,9 @@
+-- RSG: add this entry to rsg-core/shared/items.lua (inside RSGShared.Items).
+-- Image: copy install/images/rsg/lottery_ticket.png to rsg-inventory/html/images/lottery_ticket.png
+-- unique = false makes tickets stack in one slot. RSG has no per-item stack cap;
+-- carrying is limited by weight only (10 each, so 50 tickets = 500, well under normal carry limits).
+lottery_ticket = {
+    name = 'lottery_ticket', label = 'Deliverance Fortune Ticket', weight = 10, type = 'item',
+    image = 'lottery_ticket.png', unique = false, useable = true, shouldClose = true,
+    description = 'A scratch ticket of the State of Deliverance Territorial Lottery. Use it to scratch.',
+},

@@ -1,0 +1,15 @@
+-- Shop display image: install/images/lottery_ticket_shop.png (512x512). Where it goes
+-- depends on your store script; many store scripts just reuse the inventory icon
+-- (vorp_inventory/html/img/items/lottery_ticket.png or rsg-inventory/html/images/lottery_ticket.png).
+-- Check your store script's README for its image folder.
+
+-- General store examples. Keep the store price equal to the ticket price set in
+-- /lotteryadmin, because a store-bought ticket is booked in the ledger at the
+-- CURRENT lottery price when it is scratched (Config.Item.storeSoldCountsAsRevenue).
+
+-- rsg-shops (config.lua, inside the general store product list):
+{ name = 'lottery_ticket', price = 10, amount = 500, info = {}, type = 'item', slot = 20 },
+
+-- vorp_stores (config, inside the general store's buy list; key names vary by version):
+{ itemLabel = 'Deliverance Fortune Ticket', itemName = 'lottery_ticket', currencyType = 'cash',
+  buyPrice = 10, category = 'items', desc = 'Scratch to win. Three Oil Pumps strike the pot.' },

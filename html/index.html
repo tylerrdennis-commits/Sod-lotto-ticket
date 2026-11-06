@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Deliverance Territorial Lottery</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===================== Symbol art (original inline SVG) ===================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="g-gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbe7a1"/><stop offset=".45" stop-color="#d9a92e"/><stop offset="1" stop-color="#8a5a12"/>
+    </linearGradient>
+    <linearGradient id="g-copper" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f0b68a"/><stop offset=".5" stop-color="#b8653a"/><stop offset="1" stop-color="#6e3418"/>
+    </linearGradient>
+    <linearGradient id="g-iron" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8c8c88"/><stop offset="1" stop-color="#43403b"/>
+    </linearGradient>
+    <linearGradient id="g-silver" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbfbf7"/><stop offset=".5" stop-color="#b9b9b2"/><stop offset="1" stop-color="#76766f"/>
+    </linearGradient>
+    <linearGradient id="g-felt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a6440"/><stop offset="1" stop-color="#4d331c"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Silver dollar: milled-edge coin with a star and "1 DOLLAR" -->
+  <symbol id="sym-SILVER_DOLLAR" viewBox="0 0 64 64">
+    <circle cx="32" cy="33" r="25" fill="#5b5b58"/>
+    <circle cx="32" cy="32" r="25" fill="url(#g-silver)" stroke="#4a4a46" stroke-width="1.5"/>
+    <circle cx="32" cy="32" r="25" fill="none" stroke="#e9e9e2" stroke-width="2" stroke-dasharray="1.2 1.6" opacity=".8"/>
+    <circle cx="32" cy="32" r="19" fill="none" stroke="#6e6e69" stroke-width="1.2"/>
+    <path d="M32 15 l2.6 5.3 5.8.8 -4.2 4.1 1 5.8 -5.2-2.7 -5.2 2.7 1-5.8 -4.2-4.1 5.8-.8z" fill="#f4f4ee" stroke="#6e6e69" stroke-width=".8"/>
+    <text x="32" y="42" font-size="11" font-family="Georgia,serif" font-weight="bold" text-anchor="middle" fill="#3c3c38">1</text>
+    <text x="32" y="49" font-size="5.5" font-family="Georgia,serif" letter-spacing="1" text-anchor="middle" fill="#3c3c38">DOLLAR</text>
+    <path d="M17 22 A18 18 0 0 1 28 14" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".75"/>
+  </symbol>
+
+  <!-- Horseshoes: two crossed shoes -->
+  <symbol id="sym-HORSESHOES" viewBox="0 0 64 64">
+    <g fill="none" stroke-linecap="round">
+      <g transform="rotate(-24 32 34)">
+        <path d="M20 50 V30 a12 12 0 0 1 24 0 V50" stroke="#3b2a1a" stroke-width="9"/>
+        <path d="M20 50 V30 a12 12 0 0 1 24 0 V50" stroke="url(#g-iron)" stroke-width="6"/>
+        <g fill="#e8dcc0"><circle cx="20" cy="44" r="1.2"/><circle cx="20" cy="36" r="1.2"/><circle cx="44" cy="44" r="1.2"/><circle cx="44" cy="36" r="1.2"/><circle cx="26" cy="22.5" r="1.2"/><circle cx="38" cy="22.5" r="1.2"/></g>
+      </g>
+      <g transform="rotate(24 32 34)">
+        <path d="M20 50 V30 a12 12 0 0 1 24 0 V50" stroke="#3b2a1a" stroke-width="9"/>
+        <path d="M20 50 V30 a12 12 0 0 1 24 0 V50" stroke="url(#g-iron)" stroke-width="6"/>
+        <g fill="#e8dcc0"><circle cx="20" cy="44" r="1.2"/><circle cx="20" cy="36" r="1.2"/><circle cx="44" cy="44" r="1.2"/><circle cx="44" cy="36" r="1.2"/><circle cx="26" cy="22.5" r="1.2"/><circle cx="38" cy="22.5" r="1.2"/></g>
+      </g>
+    </g>
+  </symbol>
+
+  <!-- Cowboy hat -->
+  <symbol id="sym-COWBOY_HAT" viewBox="0 0 64 64">
+    <path d="M4 40 C10 48 22 50 32 50 C42 50 54 48 60 40 C54 42 46 43 32 43 C18 43 10 42 4 40 Z" fill="url(#g-felt)" stroke="#2e1e10" stroke-width="1.5"/>
+    <path d="M18 42 C17 30 19 20 24 17 C27 15 29 19 32 19 C35 19 37 15 40 17 C45 20 47 30 46 42 Z" fill="url(#g-felt)" stroke="#2e1e10" stroke-width="1.5"/>
+    <path d="M32 19 C31 26 31 32 32 36" stroke="#2e1e10" stroke-width="1.2" fill="none" opacity=".7"/>
+    <path d="M18.4 37 C26 39 38 39 45.6 37 L45.8 41.5 C38 43 26 43 18.2 41.5 Z" fill="#2a1a0c"/>
+    <circle cx="25" cy="39.6" r="1.3" fill="#d8c08a"/>
+  </symbol>
+
+  <!-- Top hat -->
+  <symbol id="sym-TOP_HAT" viewBox="0 0 64 64">
+    <ellipse cx="32" cy="50" rx="27" ry="6" fill="#1d1712" stroke="#000" stroke-width="1"/>
+    <path d="M18 49 L20 12 C26 9 38 9 44 12 L46 49 Z" fill="#26201a" stroke="#000" stroke-width="1.2"/>
+    <ellipse cx="32" cy="12" rx="12" ry="3" fill="#3a3129"/>
+    <path d="M18.6 40 L45.4 40 L45.9 47 L18.1 47 Z" fill="#7b1e1e"/>
+    <path d="M23 15 L22 38" stroke="#5c5146" stroke-width="2" opacity=".6"/>
+  </symbol>
+
+  <!-- Gold nugget -->
+  <symbol id="sym-GOLD_NUGGET" viewBox="0 0 64 64">
+    <path d="M10 40 L14 26 L24 18 L36 16 L48 22 L55 34 L52 46 L40 52 L24 51 L13 47 Z" fill="url(#g-gold)" stroke="#5a3a08" stroke-width="1.6" stroke-linejoin="round"/>
+    <path d="M24 18 L28 30 L14 26 M28 30 L36 16 M28 30 L44 34 L48 22 M44 34 L55 34 M44 34 L40 52 M28 30 L24 51 M28 30 L13 47" stroke="#8a5a12" stroke-width="1" fill="none" opacity=".55"/>
+    <path d="M20 24 L27 21" stroke="#fff6cf" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="46" cy="27" r="1.4" fill="#fff6cf"/>
+    <path d="M52 10 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5z" fill="#fff3b0"/>
+  </symbol>
+
+  <!-- Moonshine still: copper pot, cap, worm coil, jug -->
+  <symbol id="sym-MOONSHINE" viewBox="0 0 64 64">
+    <rect x="6" y="52" width="30" height="5" rx="1" fill="#4a3220"/>
+    <path d="M8 52 C6 40 10 30 21 30 C32 30 36 40 34 52 Z" fill="url(#g-copper)" stroke="#4a2410" stroke-width="1.4"/>
+    <path d="M15 30 C15 24 27 24 27 30 Z" fill="url(#g-copper)" stroke="#4a2410" stroke-width="1.2"/>
+    <path d="M21 25 C21 18 30 14 40 16 L44 22" fill="none" stroke="#9c5430" stroke-width="2.6" stroke-linecap="round"/>
+    <g fill="none" stroke="#9c5430" stroke-width="2.2"><path d="M42 24 h10"/><path d="M42 29 h10"/><path d="M42 34 h10"/></g>
+    <rect x="40" y="21" width="14" height="17" rx="2" fill="none" stroke="#4a3220" stroke-width="1.4"/>
+    <path d="M47 38 V43" stroke="#9c5430" stroke-width="2"/>
+    <path d="M42 46 C42 43 52 43 52 46 L53 57 L41 57 Z" fill="#d8ccb0" stroke="#4a3220" stroke-width="1.2"/>
+    <path d="M45 43 v-2 h4 v2" fill="#8a7a60"/>
+    <text x="47" y="54" font-size="5.5" font-family="Georgia,serif" font-weight="bold" text-anchor="middle" fill="#4a3220">XXX</text>
+    <path d="M11 44 C14 40 18 44 21 40 C24 44 28 40 31 44" stroke="#f2c49c" stroke-width="1" fill="none" opacity=".7"/>
+  </symbol>
+
+  <!-- Oil pump (walking-beam pumpjack) with oil drop -->
+  <symbol id="sym-OIL_PUMP" viewBox="0 0 64 64">
+    <rect x="4" y="54" width="56" height="4" fill="#3b2a1a"/>
+    <path d="M22 54 L30 24 L38 54" fill="none" stroke="#5a4028" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M25 44 h10" stroke="#5a4028" stroke-width="2"/>
+    <path d="M8 30 L50 18" stroke="#2b2b2b" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M48 12 C56 12 58 22 54 28 L48 20 Z" fill="#2b2b2b"/>
+    <path d="M53 27 V54" stroke="#6b6b6b" stroke-width="1.4"/>
+    <circle cx="30" cy="24" r="2.6" fill="#b8963c"/>
+    <path d="M10 30 L12 46" stroke="#2b2b2b" stroke-width="2.4"/>
+    <circle cx="12" cy="47" r="5" fill="url(#g-iron)" stroke="#222" stroke-width="1"/>
+    <rect x="49" y="50" width="8" height="4" fill="#5a4028"/>
+    <path d="M44 34 C44 34 39 41 39 44 a5 5 0 0 0 10 0 C49 41 44 34 44 34Z" fill="#111" stroke="#d9a92e" stroke-width=".8"/>
+    <ellipse cx="42.4" cy="43" rx="1.2" ry="2" fill="#666"/>
+  </symbol>
+
+  <!-- Tumbleweed (loss filler) -->
+  <symbol id="sym-TUMBLEWEED" viewBox="0 0 64 64">
+    <ellipse cx="32" cy="57" rx="18" ry="2.5" fill="#8b7355" opacity=".35"/>
+    <g fill="none" stroke="#8b6b3e" stroke-width="1.4" stroke-linecap="round" opacity=".9">
+      <circle cx="32" cy="34" r="19"/>
+      <path d="M14 30 C24 20 40 22 50 32 C40 44 24 46 14 36"/>
+      <path d="M20 18 C30 30 34 40 30 52"/>
+      <path d="M44 18 C36 28 30 42 38 52"/>
+      <path d="M13 40 C26 34 40 38 51 28"/>
+      <path d="M22 50 C28 40 40 30 46 16"/>
+      <path d="M26 15 C30 26 44 34 50 40"/>
+      <path d="M16 24 C26 30 30 44 24 52"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ===================== Customer scratch ticket ===================== -->
+<div id="ticket-wrap" class="hidden">
+  <div id="ticket" class="ticket">
+   <div class="flip">
+    <!-- FRONT -->
+    <div class="face front"><div class="ticket-border">
+      <header class="t-head">
+        <div class="t-crest">&#10022; State of Deliverance &#10022;</div>
+        <h1 id="t-title">Deliverance Fortune</h1>
+        <div id="t-subtitle" class="t-sub">Territorial Lottery of the State of Deliverance</div>
+        <div class="t-meta"><span id="t-year">Anno 1899</span><span id="t-price">One Dollar</span><span id="t-serial">No. 000000</span></div>
+      </header>
+
+      <div class="t-pot">
+        <span class="t-pot-label" id="t-pot-label">Progressive pot</span>
+        <span class="t-pot-value" id="t-pot">$0</span>
+        <svg class="t-pot-icon" viewBox="0 0 64 64"><use href="#sym-OIL_PUMP"/></svg>
+      </div>
+
+      <div class="t-body">
+        <div class="t-grid-wrap" id="grid-wrap">
+          <div class="t-grid" id="grid"></div>
+          <canvas id="foil"></canvas>
+        </div>
+        <aside class="t-prizes">
+          <div class="t-prizes-title" id="t-prize-key">Prize schedule</div>
+          <ul id="prize-list"></ul>
+        </aside>
+      </div>
+
+      <p class="t-rules" id="t-rules"></p>
+
+      <div id="banner" class="banner hidden"></div>
+
+      <div class="t-actions">
+        <button id="btn-flip" class="btn btn-ghost">Flip for odds</button>
+        <button id="btn-reveal" class="btn">Reveal all</button>
+        <button id="btn-close" class="btn btn-dark" disabled>Fold &amp; pocket</button>
+      </div>
+      <p class="t-flavour" id="t-flavour"></p>
+    </div></div>
+    <!-- BACK: odds legend, filled from the live server config -->
+    <div class="face back"><div class="ticket-border">
+      <header class="t-head">
+        <div class="t-crest">&#10022; State of Deliverance &#10022;</div>
+        <h1 class="back-title" id="b-title">Odds &amp; Conditions</h1>
+        <div class="t-meta"><span id="b-price">Ticket $10</span><span id="b-match">Match 3 to win</span><span id="b-serial">No. 000000</span></div>
+      </header>
+      <table class="legend"><tbody id="b-rows"></tbody></table>
+      <div class="b-overall" id="b-overall"></div>
+      <p class="b-rtp" id="b-rtp"></p>
+      <p class="b-fine" id="b-fine"></p>
+      <div class="t-actions"><button id="btn-flipback" class="btn btn-ghost">Flip back</button></div>
+    </div></div>
+   </div>
+  </div>
+</div>
+
+<!-- ===================== Lottery Commission ledger (admins only) ===================== -->
+<div id="admin-wrap" class="overlay hidden">
+  <div class="ledger">
+    <div class="ledger-spine"></div>
+    <!-- Left page: settings -->
+    <section class="page page-left">
+      <h2>Lottery Commission</h2>
+      <div class="page-sub">State of Deliverance &middot; Ledger of the Territorial Lottery</div>
+
+      <fieldset>
+        <legend>Sales</legend>
+        <label class="row"><span>Sales open</span><input type="checkbox" id="a-sales"></label>
+        <label class="row"><span>Losing-ticket sound</span>
+          <select id="a-losesound"><option value="sadtrombone">Sad trombone</option><option value="fart">Raspberry (fart)</option></select></label>
+        <label class="row"><span>Ticket price ($)</span><input type="number" step="0.25" id="a-price"></label>
+        <label class="row"><span>Print run (tickets)</span><input type="number" step="1" id="a-printrun"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Division of each ticket</legend>
+        <label class="row"><span>House edge %</span><input type="number" step="0.5" id="a-edge"></label>
+        <label class="row"><span>To pot from every ticket %</span><input type="number" step="0.5" id="a-jp"></label>
+        <div class="row"><span>Avg. fed to pot (all tickets)</span><b id="r-feed">-</b></div>
+        <div class="row"><span>Backs instant prizes</span><b id="a-backing">-</b></div>
+        <label class="row"><span>Auto-scale payouts to hold edge</span><input type="checkbox" id="a-autoscale"></label>
+        <label class="row"><span>RTP jackpot basis</span>
+          <select id="a-basis"><option value="current">Current pot</option><option value="seed">Seed</option></select></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Prize schedule</legend>
+        <table class="tiers">
+          <thead><tr><th>Symbol</th><th>Kind</th><th title="Fixed payouts are written at the base price and scale with the ticket price">Payout $ @ base / ratio</th><th>Weight</th><th>Pays now</th><th>Odds</th><th></th></tr></thead>
+          <tbody id="a-tiers"></tbody>
+        </table>
+        <button class="btn btn-small" id="a-addtier">+ Add tier</button>
+        <div class="hint">Payouts are at the <b id="a-baseprice">$10</b> base price, scaled with the ticket price ("Pays now" = actual prize at the price above). Weight = winning tickets per print run; the rest lose.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Progressive jackpot</legend>
+        <label class="row"><span>Seed ($ at base price)</span><input type="number" step="50" id="a-seed"></label>
+        <div class="row"><span>Seed at current price</span><b id="a-seednow">-</b></div>
+        <label class="row"><span>Loss-to-jackpot % (losing tickets)</span><input type="number" step="1" min="0" max="100" id="a-losspct"></label>
+        <label class="row"><span>Pot cap ($, 0 = none)</span><input type="number" step="100" id="a-maxpot"></label>
+        <label class="row"><span>Periodic draw</span><input type="checkbox" id="a-draw"></label>
+        <label class="row"><span>Draw mode</span>
+          <select id="a-mode"><option value="interval">Every N hours</option><option value="schedule">Daily schedule</option></select></label>
+        <label class="row" id="r-interval"><span>Every (hours)</span><input type="number" step="1" id="a-hours"></label>
+        <label class="row" id="r-schedule"><span>Times (HH:MM, comma)</span><input type="text" id="a-sched" placeholder="20:00, 23:30"></label>
+        <label class="row"><span>Min. entrants</span><input type="number" step="1" id="a-minp"></label>
+        <label class="row"><span>Min. tickets</span><input type="number" step="1" id="a-mint"></label>
+      </fieldset>
+    </section>
+
+    <!-- Right page: figures -->
+    <section class="page page-right">
+      <h3>Reckoning of Returns</h3>
+      <div class="rtp-box" id="rtp-box">
+        <div class="rtp-main"><span>Instant return to player</span><b id="r-total">-</b></div>
+        <div class="row"><span>Fixed instant prizes</span><b id="r-fixed">-</b></div>
+        <div class="row"><span>Oil Pump (progressive) tier</span><b id="r-prog">-</b></div>
+        <div class="row"><span>Long-run return (pot paid back)</span><b id="r-long">-</b></div>
+        <div class="row"><span>Instant house edge</span><b id="r-edge">-</b></div>
+        <div class="row"><span>Long-run house edge</span><b id="r-ledge">-</b></div>
+        <div class="row"><span>Tickets that win / lose</span><b id="r-winlose">-</b></div>
+        <div class="row"><span>Odds of any win</span><b id="r-odds">-</b></div>
+        <div class="row"><span>Payout scale</span><b id="r-scale">-</b></div>
+        <div id="r-warn" class="warn hidden"></div>
+      </div>
+
+      <h3>Jackpot</h3>
+      <div class="row"><span>Current pot</span><b id="l-pot" class="ink-red">-</b></div>
+      <div class="row"><span>Entries this draw</span><b id="l-entries">-</b></div>
+      <div class="row"><span>Last draw</span><b id="l-last">-</b></div>
+      <div class="row"><span>Next draw</span><b id="l-next">-</b></div>
+      <div class="draw-btns">
+        <button class="btn btn-small" id="a-drawnow">Draw now</button>
+        <label class="hint"><input type="checkbox" id="a-ignoremin"> ignore minimums</label>
+      </div>
+
+      <h3>Ledger</h3>
+      <div class="row"><span>Tickets sold</span><b id="l-sold">-</b></div>
+      <div class="row"><span>Money in</span><b id="l-in">-</b></div>
+      <div class="row"><span>Paid out (instant)</span><b id="l-instant">-</b></div>
+      <div class="row"><span>Paid out (jackpots)</span><b id="l-jpaid">-</b></div>
+      <div class="row"><span>House revenue retained</span><b id="l-house">-</b></div>
+      <div class="row"><span>Seed money injected</span><b id="l-seeds">-</b></div>
+      <div class="row total"><span>Net removed from economy</span><b id="l-net">-</b></div>
+      <div class="row"><span>Actual RTP to date</span><b id="l-rtp">-</b></div>
+
+      <h3>Recent Winners</h3>
+      <table class="winners"><thead><tr><th>Date</th><th>Name</th><th>Prize</th><th>$</th></tr></thead><tbody id="l-winners"></tbody></table>
+
+      <div class="ledger-foot">
+        <div id="a-msg" class="msg"></div>
+        <div class="foot-btns">
+          <button class="btn btn-small" id="a-defaults">Restore defaults</button>
+          <button class="btn btn-small" id="a-refresh">Refresh</button>
+          <button class="btn" id="a-save">Enter in ledger</button>
+          <button class="btn btn-dark" id="a-close">Close</button>
+        </div>
+        <div class="meta" id="a-meta"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ===================== Telegram + toasts ===================== -->
+<div id="telegram" class="telegram hidden">
+  <div class="tg-head" id="tg-head">WESTERN TERRITORIAL TELEGRAPH CO.</div>
+  <div class="tg-rule"></div>
+  <div class="tg-body" id="tg-body"></div>
+  <div class="tg-sign" id="tg-sign"></div>
+</div>
+<div id="toasts"></div>
+
+<audio id="snd-win" src="sounds/win.wav" preload="auto"></audio>
+<audio id="snd-fart" src="sounds/fart.wav" preload="auto"></audio>
+<audio id="snd-sadtrombone" src="sounds/sadtrombone.wav" preload="auto"></audio>
+<audio id="snd-yeehaw" src="sounds/yeehaw.wav" preload="auto"></audio>
+<audio id="snd-scratch" src="sounds/scratch.wav" preload="auto"></audio>
+<script src="app.js"></script>
+</body>
+</html>

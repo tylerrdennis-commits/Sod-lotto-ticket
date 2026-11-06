@@ -1,0 +1,128 @@
+AGENT NOTES - sod_lottery (Deliverance Fortune, State of Deliverance)
+For whoever maintains this next, whether a person or a coding assistant.
+=====================================================================
+
+WHAT IT IS
+A RedM scratch-ticket lottery used as an in-game money sink. Players buy the
+item "lottery_ticket" in a general store and use it from their inventory.
+A small card opens: 3 foil plates, and matching 3 wins. A progressive Oil
+Pump jackpot is fed by losing tickets. Admins tune everything in
+/lotteryadmin.
+
+GOLDEN RULE
+The SERVER does every roll and every money move. The client/NUI only draws
+the result the server already decided, and asks the server to settle. Never
+move payout logic, RNG, or money calls into client/ or html/.
+
+FILES
+  fxmanifest.lua        cerulean/rdr3 manifest. Every NUI file and sound must
+                        be listed under files{}.
+  shared/config.lua     ALL defaults (documented inline). See KEY SETTINGS.
+  shared/plates.lua     Symbol ids, labels and jackpot flags; PlateOrder is the
+                        UI order. The art is in html/index.html (<symbol id="sym-ID">).
+  locales/strings.lua   Every player-facing string, plus the ticket copy (Strings.ui).
+  client/main.lua       NUI focus and relays, the optional post-office prompt
+                        (off by default), chat suggestions. No game logic.
+  server/bridge.lua     Framework adapter: auto-detects vorp_core, then rsg-core,
+                        then standalone. Money (CASH ONLY), usable item, admin
+                        check, character-loaded hook. The only place with
+                        framework calls.
+  server/db.lua         oxmysql via exports (no @oxmysql include). Falls back to
+                        memory if oxmysql isn't started. Tables are created from
+                        sql/install.sql when Config.AutoCreateTables = true.
+  server/economy.lua    Settings validation (the server-side gate for every admin
+                        save), RTP maths (Economy.analyse), price scaling
+                        (Economy.priceFactor / seedValue / fixedPayout), the RNG
+                        roll, the 3-plate grid builder, and the odds legend
+                        sent to the ticket's back (Economy.legend).
+  server/main.lua       Ticket issue/settle, the price split (house / pot /
+                        backing), rate limits, cooldown, serial check, timeouts,
+                        queued payouts for offline winners.
+  server/jackpot.lua    Periodic draw among ticket entries (interval or schedule).
+  server/admin.lua      /lotteryadmin panel events (permission re-checked on every event).
+  server/money_admin.lua  /givemoney and /takemoney (ACE only, capped, audited).
+  html/index.html       NUI: SVG symbols, ticket (front + flip back), admin ledger,
+                        telegram, toasts.
+  html/style.css        Parchment look; compact 480x360 card anchored lower-right.
+  html/app.js           NUI logic. analyse() MIRRORS Economy.analyse in Lua;
+                        keep the two in sync. Mock mode: ?mock=ticket|admin|telegram.
+  html/sounds/          win.wav, scratch.wav, yeehaw.wav (Oil Pump only),
+                        sadtrombone.wav (default loss), fart.wav (optional loss).
+  sql/install.sql       Tables: kv (settings/state), tickets (ledger), entries
+                        (draw), winners, pending (offline payouts), audit (money commands).
+  install/              vorp_items.sql, rsg_items.lua.txt, store_examples.txt, and
+                        images/ (vorp 96px, rsg 100px, 192px, 512px shop).
+  README.md / README_SUMMARY.txt   Admin docs and a staff summary.
+
+KEY SETTINGS (shared/config.lua; most can be overridden in /lotteryadmin and
+saved in the DB, and the DB copy wins over the config)
+  Config.basePrice = 10           The price the fixed payouts and the seed are
+                                  written for. Paid prize = payout x
+                                  ticketPrice / basePrice (in cents), then
+                                  auto-scale on top. RTP % is price-independent.
+  Defaults.ticketPrice = 10
+  Defaults.tiers                  plate, type (fixed | price_ratio | progressive),
+                                  payout (at base price) or ratio, weight per
+                                  printRun (120000). Defaults: 61,200 winning
+                                  weights, so 51% win and 49% lose. Silver Dollar
+                                  is price_ratio 0.5 (half back).
+  Defaults.houseEdge = 30         % of each ticket retained (sunk).
+  Defaults.autoScalePayouts = false   If true, fixed tiers are scaled so that the
+                                  long-run return = 100 - houseEdge. With the
+                                  defaults that RAISES prizes (x1.65), which
+                                  makes a weaker sink.
+  Defaults.jackpotPercent = 0     % of EVERY ticket fed to the pot.
+  Defaults.jackpot.seed = 2500    At the base price (scales with price).
+  Defaults.jackpot.lossContributionPct = 50   % of each LOSING ticket's price
+                                  fed to the pot. Wins add nothing.
+  Defaults.jackpot.drawEnabled / drawMode / intervalHours / schedule /
+                                  minPlayers / minTickets   Periodic draw settings.
+  Config.DirectSale.enabled = false   /buyticket and the post-office G prompt.
+                                  Off, so the store is the only purchase path.
+  Config.Sounds.lose = 'sadtrombone'  or 'fart' (also selectable in the admin panel).
+  Config.AdminMoney               enabled, giveCommand/takeCommand,
+                                  maxAmount = 10000, takeMode = 'refuse' | 'partial'.
+
+DEFAULT ECONOMICS ($10, auto-scale off): instant prizes 32.04%; long-run
+(pot paid back + seed) 56.95%; long-run house edge 43.05%. With auto-scale
+on: 45.08% / 70.00% / 30.00%.
+
+GOTCHAS
+  * CASH ONLY. bridge.lua hard-codes VORP currency 0 and RSG 'cash' for every
+    purchase, prize and admin command. Don't add bank options. BUT the store
+    script that SELLS the item charges the player itself, outside this
+    resource. Configure that store to charge cash, or it may take the money
+    from the bank.
+  * Store-sold tickets are booked in the ledger at the CURRENT lottery price
+    when scratched (Config.Item.storeSoldCountsAsRevenue). Keep the store price
+    equal to the ticket price.
+  * Stacking: VORP limit = 50 (install/vorp_items.sql). RSG has NO per-item
+    stack cap; unique = false stacks, and carrying is limited by weight only
+    (10 each).
+  * Item images go in vorp_inventory/html/img/items/lottery_ticket.png (VORP)
+    and rsg-inventory/html/images/lottery_ticket.png (RSG). Where the shop image
+    goes depends on the store script.
+  * Admin permission: ACE "sod_lottery.admin" (add_ace group.admin
+    sod_lottery.admin allow). /lotteryadmin also accepts the framework groups
+    in Config.Admin. /givemoney and /takemoney accept ACE or the console ONLY.
+  * Audit: every /givemoney and /takemoney is printed to the console and
+    written to sod_lottery_audit (admin, target, amount, cash before/after).
+  * Changing the price doesn't rescale an existing pot; only future reseeds
+    use seed x price/base.
+  * If you change the RTP maths, update BOTH server/economy.lua (analyse,
+    legend) and html/app.js (analyse), and the standalone test page.
+  * Not yet run on a live RedM server; it was verified with mocks, Lua
+    syntax checks, simulations and headless Chrome.
+
+HOW TO RE-CHECK RTP AFTER CHANGING ODDS
+  1. /lotteryadmin: "Reckoning of Returns" updates live as you type (instant
+     return, long-run return, both edges, win/lose %, warnings if over 100% or
+     the edge isn't met). The ledger shows the actual RTP to date.
+  2. The ticket's "Flip for odds" back shows the live instant and long-run
+     return players see.
+  3. The browser test harness sod_lottery_test/lotto_test.html (shipped
+     separately): set the price and loss-to-jackpot %, press "Simulate 10,000"
+     a few times, and compare the observed and theoretical figures (jackpot
+     hits make the observed RTP swing).
+  4. For code changes: run a Lua mock harness simulation (100k+ tickets).
+     The instant RTP should match theory to within about 0.3%.
